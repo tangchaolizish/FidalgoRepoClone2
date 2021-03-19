@@ -52,10 +52,6 @@
             "type": "bool",
             "defaultValue": false
         },
-        "appSettings": {
-            "type": "object",
-            "defaultValue": null
-        },
         "corsAllowedUrls": {
             "type": "array",
             "defaultValue": []
@@ -78,7 +74,7 @@
         "websiteApiVersion": "2018-02-01",
         "fullSiteName": "[concat(parameters('siteName'), '-', replace(variables('resourceLocation'),' ',''))]",
         "fullServicePlanName": "[concat(parameters('servicePlanName'), '-', replace(variables('resourceLocation'),' ',''))]",
-        "slotSettings": "[union(parameters('appSettings'), json('{\"WEBSITE_OVERRIDE_PRESERVE_DEFAULT_STICKY_SLOT_SETTINGS\": \"false\"}'))]",
+        "slotSettings": "[json('{\"WEBSITE_OVERRIDE_PRESERVE_DEFAULT_STICKY_SLOT_SETTINGS\": \"false\"}')]",
         "fullAppSettings": "[if(equals(parameters('deploymentExtension'), 'MSDeploy'), variables('slotSettings') ,union(variables('slotSettings'), json('{\"WEBSITE_RUN_FROM_PACKAGE\": \"1\"}')))]"
     },
     "resources": [
