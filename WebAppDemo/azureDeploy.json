@@ -1,0 +1,163 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploymentLabel": {
+            "type": "string"
+        },
+        "servicePlanName": {
+            "type": "string"
+        },
+        "siteName": {
+            "type": "string"
+        },
+        "blobSasUrl": {
+            "type": "string"
+        },
+        "buildVersion": {
+            "type": "string"
+        },
+        "websitePlanSku": {
+            "type": "string",
+            "defaultValue": "Shared"
+        },
+        "websitePlanSize": {
+            "type": "string",
+            "defaultValue": "D1"
+        },
+        "clientAffinityEnabled": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "alwaysOn": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "minTlsVersion": {
+            "type": "string",
+            "defaultValue": "1.2",
+            "allowedValues": [
+                "1.2"
+            ]
+        },
+        "workerProcessPlatform": {
+            "type": "string",
+            "defaultValue": "32-bit",
+            "allowedValues": [
+                "32-bit",
+                "64-bit"
+            ]
+        },
+        "httpsOnly": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "appSettings": {
+            "type": "object",
+            "defaultValue": null
+        },
+        "corsAllowedUrls": {
+            "type": "array",
+            "defaultValue": []
+        },
+        "healthCheckPath": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "deploymentExtension": {
+            "type": "string",
+            "defaultValue": "MSDeploy",
+            "allowedValues": [
+                "MSDeploy",
+                "ZipDeploy"
+            ]
+        }
+    },
+    "variables": {
+        "resourceLocation": "[resourcegroup().location]",
+        "websiteApiVersion": "2018-02-01",
+        "fullSiteName": "[concat(parameters('siteName'), '-', replace(variables('resourceLocation'),' ',''))]",
+        "fullServicePlanName": "[concat(parameters('servicePlanName'), '-', replace(variables('resourceLocation'),' ',''))]",
+        "slotSettings": "[union(parameters('appSettings'), json('{\"WEBSITE_OVERRIDE_PRESERVE_DEFAULT_STICKY_SLOT_SETTINGS\": \"false\"}'))]",
+        "fullAppSettings": "[if(equals(parameters('deploymentExtension'), 'MSDeploy'), variables('slotSettings') ,union(variables('slotSettings'), json('{\"WEBSITE_RUN_FROM_PACKAGE\": \"1\"}')))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('websiteApiVersion')]",
+            "name": "[variables('fullServicePlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[variables('resourceLocation')]",
+            "sku": {
+                "name": "[parameters('websitePlanSize')]",
+                "tier": "[parameters('websitePlanSku')]"
+            }
+        },
+        {
+            "apiVersion": "[variables('websiteApiVersion')]",
+            "name": "[variables('fullSiteName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[variables('resourceLocation')]",
+            "dependsOn": [
+				"[resourceId('Microsoft.Web/serverFarms/', variables('fullServicePlanName'))]"
+            ],
+            "properties": {
+                "name": "[variables('fullSiteName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverFarms/', variables('fullServicePlanName'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "[variables('websiteApiVersion')]",
+                    "name": "appsettings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', variables('fullSiteName'))]"
+                    ],
+                    "tags": {
+                        "displayName": "WebAppSettings"
+                    },
+                    "properties": "[variables('fullAppSettings')]"
+                },
+                {
+                    "apiVersion": "[variables('websiteApiVersion')]",
+                    "name": "[parameters('deploymentExtension')]",
+                    "type": "extensions",
+                    "location": "[variables('resourceLocation')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', variables('fullSiteName'))]",
+                        "appsettings"
+                    ],
+                    "properties": {
+                        "packageUri": "[parameters('blobSasUrl')]",
+                        "dbType": "None",
+                        "connectionString": "",
+                        "appOffline": true,
+                        "setParameters": {
+                            "IIS Web Application Name": "[variables('fullSiteName')]"
+                        }
+                    }
+                },
+                {
+                    "apiVersion": "[variables('websiteApiVersion')]",
+                    "name": "web",
+                    "type": "config",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', variables('fullSiteName'))]",
+                        "[parameters('deploymentExtension')]",
+                        "appsettings"
+                    ],
+                    "tags": {
+                        "displayName": "WebAppSettings"
+                    },
+                    "properties": {
+                        "alwaysOn": "[parameters('alwaysOn')]",
+                        "minTlsVersion": "[parameters('minTlsVersion')]",
+                        "use32BitWorkerProcess": "[if(equals(parameters('workerProcessPlatform'), '32-bit'), 'true', 'false')]",
+                        "cors": {
+                            "allowedOrigins": "[parameters('corsAllowedUrls')]"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
