@@ -1,6 +1,6 @@
-name: "Test Template",
-version: "1.0.0",
-description: "A very good template.",
+name: Test Template
+version: 1.0.0
+description: A very good template.
 engine:
-  type: "ARM",
-  entryPoint: "azuredeploy.json"
+  type: ARM
+  entryPoint: azuredeploy.json
