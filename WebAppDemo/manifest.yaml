@@ -1,0 +1,5 @@
+version: 1.0.0
+descdription: A very good template.
+engine:
+  type: dfs
+  entrPoint: azuredeploy.json
