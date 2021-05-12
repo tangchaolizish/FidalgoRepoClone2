@@ -1,6 +1,6 @@
 name: Test_Template
-version: 1.0.0
-description: A very good duplicate template.
+version: 1.0.1
+description: A very good original template.
 engine:
   type: ARM
   templatePath: azuredeploy.json
