@@ -1,0 +1,6 @@
+name: Test_Delete_Template
+version: 1.0.0
+description: This template will be deleted very quickly :(
+engine:
+  type: ARM
+  templatePath: azuredeploy.json
