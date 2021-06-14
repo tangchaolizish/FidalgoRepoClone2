@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": 
+    {
+        "vmName": 
+        {
+            "type": "string",
+            "defaultValue": "simpleLinuxVM",
+            "metadata": 
+            {
+                "description": "The name of your Virtual Machine."
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+		{
+            "name": "NestOne",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "dependsOn": [],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "relativePath": "./nestedTemplate.json",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

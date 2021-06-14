@@ -1,0 +1,6 @@
+name: Nested_Template
+version: 1.0.0
+description: References a nested template
+engine:
+  type: ARM
+  templatePath: azuredeploy.json
