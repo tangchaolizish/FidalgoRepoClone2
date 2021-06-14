@@ -2,5 +2,5 @@ name: Test_Template3
 version: 1.0.0
 description: A very good template.
 engine:
-  type: ARM2
+  type: ARM
   templatePath: azuredeploy.json
