@@ -1,0 +1,6 @@
+name: KeyVault
+version: 1.0.0
+description: Simple keyVault
+engine:
+  type: ARM
+  templatePath: azuredeploy.json
