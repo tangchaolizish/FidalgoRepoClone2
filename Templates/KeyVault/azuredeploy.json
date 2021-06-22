@@ -64,52 +64,6 @@
                 "enabledForTemplateDeployment": "[parameters('enabledForTemplateDeployment')]",
                 "enabledForDiskEncryption": "[parameters('enabledForDiskEncryption')]",
                 "enableRbacAuthorization": "[parameters('enableRbacAuthorization')]",
-                "accessPolicies": [
-                    {
-                        "objectId": "46dd1771-8391-4167-8b17-41545fd2b207",
-                        "tenantId": "f686d426-8d16-42db-81b7-ab578e110ccd",
-                        "permissions": {
-                            "keys": [
-                                "Get",
-                                "List",
-                                "Update",
-                                "Create",
-                                "Import",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore"
-                            ],
-                            "secrets": [
-                                "Get",
-                                "List",
-                                "Set",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore"
-                            ],
-                            "certificates": [
-                                "Get",
-                                "List",
-                                "Update",
-                                "Create",
-                                "Import",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore",
-                                "ManageContacts",
-                                "ManageIssuers",
-                                "GetIssuers",
-                                "ListIssuers",
-                                "SetIssuers",
-                                "DeleteIssuers"
-                            ]
-                        },
-                        "applicationId": ""
-                    }
-                ],
                 "tenantId": "[parameters('tenant')]",
                 "sku": {
                     "name": "[parameters('sku')]",
