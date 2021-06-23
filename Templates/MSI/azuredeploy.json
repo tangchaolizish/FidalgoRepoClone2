@@ -7,6 +7,9 @@
         },
         "location": {
             "type": "string"
+        },
+        "tagsByResource": {
+            "type": "object"
         }
     },
     "resources": [
@@ -15,7 +18,8 @@
             "name": "[parameters('name')]",
             "location": "[parameters('location')]",
             "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
-            "properties": {}
+            "properties": {},
+            "tags": "[ if(contains(parameters('tagsByResource'), 'Microsoft.ManagedIdentity/userAssignedIdentities'), parameters('tagsByResource')['Microsoft.ManagedIdentity/userAssignedIdentities'], json('{}')) ]"
         }
     ]
 }
