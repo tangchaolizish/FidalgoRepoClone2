@@ -4,7 +4,7 @@
     "parameters": {
         "name": {
             "type": "string",
-            "defaultValue": "MSI1",
+            "defaultValue": "UserIdentity-LJ",
         },
         "location": {
             "type": "string",
