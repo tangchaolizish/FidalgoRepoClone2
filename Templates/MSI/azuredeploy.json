@@ -4,7 +4,7 @@
     "parameters": {
         "name": {
             "type": "string",
-            "defaultValue": "UserIdentity-LJ-proj3",
+            "defaultValue": "UserIdentity-LJ-proj4",
         },
         "location": {
             "type": "string",
